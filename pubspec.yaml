@@ -13,6 +13,8 @@ dependencies:
   flutter_riverpod: ^2.3.2
   go_router: ^6.2.0
   google_fonts: ^4.0.3
+  http: 0.13.5
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_lints: ^2.0.0

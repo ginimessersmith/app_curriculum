@@ -1,3 +1,4 @@
+import 'package:curriculum/features/shared/widgets/menu_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:curriculum/features/shared/shared.dart';
@@ -29,23 +30,31 @@ class _SideMenuState extends State<SideMenu> {
             navDrawerIndex = value;
           });
 
-          // final menuItem = appMenuItems[value];
-          // context.push( menuItem.link );
+          final MenuUser = appMenuUser[value];
+          GoRouter.of(context).go(MenuUser.link);
           widget.scaffoldKey.currentState?.closeDrawer();
         },
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
-            child: Text('Saludos', style: textStyles.titleMedium),
+            child: Text(
+              'Menu',
+              style: textStyles.titleMedium,
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-            child: Text('Nombre User', style: textStyles.titleSmall),
-          ),
-          const NavigationDrawerDestination(
-            icon: Icon(Icons.home_outlined),
-            label: Text('Convocatorias'),
-          ),
+          for(var item in appMenuUser)
+            ListTile(
+              leading: Icon(item.icon),
+              title: Text(item.label),
+              onTap: (){
+                setState(() {
+                  navDrawerIndex=appMenuUser.indexOf(item);
+
+                });
+                widget.scaffoldKey.currentState?.openEndDrawer();
+                GoRouter.of(context).go(item.link);
+              },
+            ),
           const Padding(
             padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
             child: Divider(),

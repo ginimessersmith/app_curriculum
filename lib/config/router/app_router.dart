@@ -1,6 +1,8 @@
+import 'package:curriculum/features/campaign/presentation/screens/campaign_screen.dart';
+import 'package:curriculum/features/campaign/presentation/screens/screens.dart';
+import 'package:curriculum/features/perfil/perfil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:curriculum/features/auth/auth.dart';
-import 'package:curriculum/features/products/products.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -15,11 +17,21 @@ final appRouter = GoRouter(
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
-
-    ///* Product Routes
+    GoRoute(
+      path: '/campaign',
+      builder: (context, state) => const Campaign(),
+    ),
+    GoRoute(
+      path: '/perfil',
+      builder: (context, state) => const Perfil(),
+    ),
+    GoRoute(
+      path: '/send-curriculum',
+      builder: (context, state) => const SendCurriculumScreen(),
+    ),
     GoRoute(
       path: '/',
-      builder: (context, state) => const PerfilScreen(),
+      builder: (context, state) => const Perfil(),
     ),
   ],
   ///! TODO: Bloquear si no se está autenticado de alguna manera
