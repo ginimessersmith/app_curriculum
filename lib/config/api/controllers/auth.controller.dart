@@ -25,7 +25,7 @@ class AuthController {
       print({response});
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        await user.setString('token', data['token']);
+        // await user.setString('token', data['token']);
         await user.setString('email', email.text);
         await user.setString('id', data['id']);
         await user.setString('names', data['employee']['names']);

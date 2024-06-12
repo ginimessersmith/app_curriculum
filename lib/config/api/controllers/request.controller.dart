@@ -2,6 +2,7 @@ import 'package:curriculum/config/api/connections/api.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 class RequestController {
   final Dio _dio = Dio();
@@ -13,39 +14,35 @@ class RequestController {
     required String namePostulant,
     PlatformFile? curriculumVitae,
   }) async {
-    FormData formData = FormData();
+    print(curriculumVitae);
+    String? path = curriculumVitae?.path;
+    String? fileName = curriculumVitae?.name;
+    print(' file name : $fileName');
+    print('path file: $path');
 
-    formData.fields.addAll([
-      MapEntry('campaignId', campaignId),
-      MapEntry('emailPostulant', emailPostulant),
-      MapEntry('namePostulant', namePostulant),
-    ]);
-
-    if (curriculumVitae != null) {
-      formData.files.add(MapEntry(
-        'curriculumVitae',
-        await MultipartFile.fromFile(
-          curriculumVitae.path!,
-          filename: curriculumVitae.name,
-        ),
-      ));
+    if (path == null || fileName == null) {
+      throw Exception('El archivo no es válido.');
     }
 
-    // String fileName = formData.files['curriculumVitae']!.filename;
-    // final formData = FormData.fromMap({
-    //   'campaignId': campaignId,
-    //   'emailPostulant': emailPostulant,
-    //   'namePostulant': namePostulant,
-    //   if (curriculumVitae != null)
-    //     'curriculumVitae': await MultipartFile.fromFile(
-    //       curriculumVitae.path!,
-    //       filename: curriculumVitae.name,
-    //     ),
+    // final FormData data = FormData.fromMap({
+    //   'file': MultipartFile.fromFileSync(path, filename: fileName)
     // });
 
+    final FormData formData = FormData.fromMap({
+      'curriculumVitae': MultipartFile.fromFileSync(
+        path,
+        filename: fileName,
+      ),
+      'campaignId': campaignId,
+      'emailPostulant': emailPostulant,
+      'namePostulant': namePostulant,
+    });
     try {
-      final response =
-          await _dio.post('$api/curriculum/create-request', data: formData);
+      final response = await _dio.post(
+        '$api/curriculum/create-request',
+        data: formData,
+      );
+
       if (response.statusCode == 200) {
         print('Formulario enviado con éxito');
       } else {
