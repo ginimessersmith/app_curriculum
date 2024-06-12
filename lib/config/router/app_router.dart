@@ -5,9 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:curriculum/features/auth/auth.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/login',
   routes: [
-
     ///* Auth Routes
     GoRoute(
       path: '/login',
@@ -27,12 +26,16 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/send-curriculum',
-      builder: (context, state) => const SendCurriculumScreen(),
+      builder: (context, state) {
+        final id = state.extra as String;
+        return SendCurriculumScreen(campaignId: id);
+      },
     ),
     GoRoute(
       path: '/',
       builder: (context, state) => const Perfil(),
     ),
   ],
+
   ///! TODO: Bloquear si no se está autenticado de alguna manera
 );

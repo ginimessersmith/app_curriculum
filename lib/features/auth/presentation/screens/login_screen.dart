@@ -1,3 +1,4 @@
+import 'package:curriculum/config/api/controllers/auth.controller.dart';
 import 'package:curriculum/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +53,8 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
+    TextEditingController email = TextEditingController();
+    TextEditingController pass = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -60,14 +63,16 @@ class _LoginForm extends StatelessWidget {
           const SizedBox(height: 50),
           Text('Login', style: textStyles.titleLarge),
           const SizedBox(height: 90),
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Correo',
             keyboardType: TextInputType.emailAddress,
+            controller: email,
           ),
           const SizedBox(height: 30),
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
+            controller: pass,
           ),
           const SizedBox(height: 30),
           SizedBox(
@@ -77,7 +82,8 @@ class _LoginForm extends StatelessWidget {
                 text: 'Ingresar',
                 buttonColor: Colors.black,
                 onPressed: () {
-                  appRouter.go('/perfil');
+                  // appRouter.go('/perfil');
+                  AuthController().login(email, pass);
                 },
               )),
           const Spacer(flex: 2),

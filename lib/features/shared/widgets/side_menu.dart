@@ -7,9 +7,16 @@ import '../../../config/router/app_router.dart';
 
 class SideMenu extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
+  String name;
+  String email;
 
-  const SideMenu({super.key, required this.scaffoldKey});
-
+  SideMenu({
+    Key? key,
+    required this.scaffoldKey,
+    required this.name,
+    required this.email,
+  }) : super(key: key);
+  
   @override
   State<SideMenu> createState() => _SideMenuState();
 }
@@ -38,18 +45,17 @@ class _SideMenuState extends State<SideMenu> {
           Padding(
             padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
             child: Text(
-              'Menu',
+              widget.name,
               style: textStyles.titleMedium,
             ),
           ),
-          for(var item in appMenuUser)
+          for (var item in appMenuUser)
             ListTile(
               leading: Icon(item.icon),
               title: Text(item.label),
-              onTap: (){
+              onTap: () {
                 setState(() {
-                  navDrawerIndex=appMenuUser.indexOf(item);
-
+                  navDrawerIndex = appMenuUser.indexOf(item);
                 });
                 widget.scaffoldKey.currentState?.openEndDrawer();
                 GoRouter.of(context).go(item.link);

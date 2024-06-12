@@ -2,6 +2,8 @@ import 'package:curriculum/config/api/controllers/campaign.controller.dart';
 import 'package:curriculum/config/router/app_router.dart';
 import 'package:curriculum/features/shared/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Campaign extends StatefulWidget {
   const Campaign({super.key});
@@ -13,12 +15,17 @@ class Campaign extends StatefulWidget {
 class _CampaignState extends State<Campaign> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<dynamic> allCampaignApi = [];
-  String nameUser = 'Gino';
-  String emailUser = 'ginobaptista@gmail.com';
+  String nameUser = '';
+  String emailUser = '';
+  String last_namesUser = '';
+  int cellphoneUser = 0;
+  String addressUser = '';
+  String professionUser = '';
 
   @override
   void initState() {
     // all campaign
+    getDataUser();
     CampaignController().findAllCampaign().then((value) {
       setState(() {
         allCampaignApi = value;
@@ -27,11 +34,37 @@ class _CampaignState extends State<Campaign> {
     super.initState();
   }
 
+  void getDataUser() async {
+    SharedPreferences user = await SharedPreferences.getInstance();
+    String name = user.getString('names') ?? '';
+    String email = user.getString('email') ?? '';
+    String lastName = user.getString('last_names') ?? '';
+    int cellphone = user.getInt('cellphone') ?? 0;
+    String address = user.getString('address') ?? '';
+    String profession = user.getString('profession') ?? '';
+    // debugPrint('${name}');
+    // debugPrint('${email}');
+    // debugPrint('${lastName}');
+    // debugPrint('${cellphone}');
+    // debugPrint('${address}');
+
+    setState(() {
+      nameUser = name;
+      emailUser = email;
+      last_namesUser = lastName;
+      cellphoneUser = cellphone;
+      addressUser = address;
+      professionUser = profession;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideMenu(
         scaffoldKey: scaffoldKey,
+        name: '',
+        email: '',
       ),
       body: CampaignView(
         allCampaign: allCampaignApi,
@@ -76,9 +109,10 @@ class CampaignView extends StatelessWidget {
               Row(
                 children: [
                   const Spacer(),
-                  ElevatedButton(onPressed: () => {
-                    appRouter.go('/send-curriculum')
-                  }, child: const Text('Ir'))
+                  ElevatedButton(
+                      onPressed: () => context.push('/send-curriculum',
+                          extra: allCampaign[index]['id'] as String),
+                      child: const Text('Ir'))
                 ],
               )
             ],
