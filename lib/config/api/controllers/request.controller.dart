@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:curriculum/config/api/connections/api.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class RequestController {
   final Dio _dio = Dio();
@@ -24,20 +27,18 @@ class RequestController {
       throw Exception('El archivo no es válido.');
     }
 
-    // final FormData data = FormData.fromMap({
-    //   'file': MultipartFile.fromFileSync(path, filename: fileName)
-    // });
-
     final FormData formData = FormData.fromMap({
-      'curriculumVitae': MultipartFile.fromFileSync(
+      'curriculumVitae':await MultipartFile.fromFileSync(
         path,
         filename: fileName,
+        contentType: MediaType('application', 'pdf'),
       ),
       'campaignId': campaignId,
       'emailPostulant': emailPostulant,
       'namePostulant': namePostulant,
     });
     try {
+
       final response = await _dio.post(
         '$api/curriculum/create-request',
         data: formData,
@@ -48,9 +49,12 @@ class RequestController {
       } else {
         print('Error al enviar el formulario');
       }
-    } catch (e) {
-      print('ERROOOOOOORRRRRRRR:.........................');
-      print('Error: $e');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print('headers: ${e.response!.headers}');
+        print('requestOptions: ${e.response!.requestOptions}');
+        print('data: ${e.response!.data}');
+      }
     }
   }
 }
