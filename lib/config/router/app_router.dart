@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:curriculum/features/auth/auth.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/perfil',
+  initialLocation: '/login',
   routes: [
     ///* Auth Routes
     GoRoute(
