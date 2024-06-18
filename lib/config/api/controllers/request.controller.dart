@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:curriculum/config/api/connections/api.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -28,7 +26,7 @@ class RequestController {
     }
 
     final FormData formData = FormData.fromMap({
-      'curriculumVitae':await MultipartFile.fromFileSync(
+      'curriculumVitae': await MultipartFile.fromFileSync(
         path,
         filename: fileName,
         contentType: MediaType('application', 'pdf'),
@@ -38,7 +36,6 @@ class RequestController {
       'namePostulant': namePostulant,
     });
     try {
-
       final response = await _dio.post(
         '$api/curriculum/create-request',
         data: formData,
